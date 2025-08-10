@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>KD-ICT | פתרונות טכנולוגיים פורצי דרך</title>
 
   <!-- Meta SEO -->
@@ -28,16 +28,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- Tailwind CSS (CDN for dev — לבילד פרודקשן מומלץ להשתמש ב־CLI עם purge) -->
+  <!-- Tailwind (CDN for dev; for prod use CLI with content purge) -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#0D47A1' },
+            secondary: '#1976D2',
+            accent: '#FFC107'
+          },
+          fontFamily: {
+            heebo: ['Heebo', 'system-ui', 'sans-serif'],
+            poppins: ['Poppins', 'Heebo', 'sans-serif']
+          },
+          boxShadow: {
+            glow: '0 10px 30px -10px rgba(13,71,161,.35)'
+          },
+          backgroundImage: {
+            'hero-gradient':
+              'radial-gradient(60% 80% at 75% 10%, rgba(25,118,210,.18) 0%, rgba(25,118,210,0) 60%), radial-gradient(70% 70% at 25% 30%, rgba(255,193,7,.18) 0%, rgba(255,193,7,0) 55%), linear-gradient(180deg, #0f172a 0%, #0b1224 100%)'
+          }
+        }
+      }
+    }
+  </script>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-  <!-- Swiper.js -->
+  <!-- Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
   <!-- JSON-LD Schema -->
@@ -75,457 +99,487 @@
 
   <style>
     :root{
-      --color-primary:#0D47A1;
-      --color-secondary:#1976D2;
-      --color-accent:#FFC107;
-      --color-text:#1a202c;
-      --color-bg-light:#f8fafc;
-      --color-bg-dark:#0f172a;
+      --color-bg-light:#f7fafc;
+      --color-bg-dark:#0b1224;
     }
-    body{
-      font-family:'Heebo',sans-serif;
-      scroll-behavior:smooth;
-      background-color:var(--color-bg-light);
-      color:var(--color-text);
-    }
-    h1,h2,h3,h4{font-family:'Poppins','Heebo',sans-serif;font-weight:800;}
-    /* Header glass on scroll */
-    #header.scrolled{background-color:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 4px 6px -1px rgb(0 0 0 / 5%);}
-    /* Gradients & shape divider */
-    .section-gradient-light{background:linear-gradient(180deg,var(--color-bg-light) 0%,#fff 100%);}
-    .section-gradient-dark{background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);}
-    .shape-divider{position:absolute;bottom:-1px;left:0;width:100%;overflow:hidden;line-height:0;}
-    .shape-divider svg{position:relative;display:block;width:calc(130% + 1.3px);height:120px;}
-    .shape-fill-light{fill:var(--color-bg-light);}
-    /* Mouse follower (respect reduced motion) */
-    @media (pointer:fine) and (prefers-reduced-motion:no-preference){
-      #mouse-follower{position:fixed;width:400px;height:400px;border-radius:50%;
-        background:radial-gradient(circle,rgba(25,118,210,.08) 0%,rgba(25,118,210,0) 60%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);display:block;}
-    }
-    @media (pointer:coarse), (prefers-reduced-motion:reduce){#mouse-follower{display:none;}}
-    /* Bento grid */
-    .bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .bento-item{perspective:1000px;}
-    .bento-card{background:#fff;border-radius:1rem;padding:2rem;box-shadow:0 10px 15px -3px rgb(0 0 0 / 5%);transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s ease;height:100%;border:1px solid #e5e7eb;}
-    .bento-item:hover .bento-card{box-shadow:0 25px 50px -12px rgb(0 0 0 / 15%);}
-    .bento-item.col-span-2{grid-column:span 2;}
-    @media (max-width:768px){.bento-grid{grid-template-columns:1fr}.bento-item.col-span-2{grid-column:span 1}}
+    html,body {scroll-behavior:smooth}
+    body {font-family: 'Heebo', sans-serif; background: var(--color-bg-light);}
+    h1,h2,h3,h4 {font-family:'Poppins','Heebo',sans-serif; font-weight:800;}
+    /* glass header */
+    #header.scrolled{background-color:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 4px 18px rgba(13,71,161,.18)}
+    /* visually hidden */
+    .sr-only:not(:focus):not(:active){clip:rect(0 0 0 0);clip-path:inset(50%);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px;}
+    /* tabs */
+    .method-tab.active{background:#1d4ed8;color:#fff}
+    .method-content{display:none}
+    .method-content.active{display:block;animation:fade .35s}
+    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    /* bento */
+    .bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .bento-item{perspective:1000px}
+    .bento-card{background:#fff;border-radius:1.1rem;padding:2rem;border:1px solid #e6ebf1;box-shadow:0 8px 24px rgba(0,0,0,.06);transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s}
+    .bento-item:hover .bento-card{box-shadow:0 26px 60px -12px rgba(13,71,161,.25)}
     .animated-icon{transition:transform .3s ease}
     .bento-card:hover .animated-icon{transform:scale(1.12) rotate(-6deg)}
+    @media (max-width: 900px){.bento-grid{grid-template-columns:1fr}}
+    /* buttons */
     .shine-button{position:relative;overflow:hidden}
-    .shine-button::after{content:'';position:absolute;top:-50%;left:-50%;width:20px;height:200%;
-      background:linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,.4) 50%,rgba(255,255,255,0) 100%);
-      transform:translateX(-250px) skewX(-20deg);}
+    .shine-button::after{content:'';position:absolute;top:-50%;left:-50%;width:20px;height:200%;background:linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,.45) 50%,rgba(255,255,255,0) 100%);transform:translateX(-250px) skewX(-20deg)}
     .shine-button:hover::after{transition:transform 1s ease;transform:translateX(250px) skewX(-20deg)}
-    /* Tabs a11y */
-    .method-tab.active{background-color:#1d4ed8;color:#fff}
-    .method-content{display:none}
-    .method-content.active{display:block;animation:fadeIn .4s}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    /* Visually-hidden utility for a11y text */
-    .sr-only:not(:focus):not(:active){clip:rect(0 0 0 0);clip-path:inset(50%);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px;}
+    /* counters */
+    .odometer {tabular-nums:tabular-nums}
   </style>
 </head>
-<body class="antialiased">
+<body class="antialiased text-slate-900">
 
-  <!-- Skip to content (a11y) -->
+  <!-- Skip link -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:right-2 bg-blue-700 text-white px-3 py-2 rounded">
     דלג לתוכן הראשי
   </a>
 
-  <!-- Removed heavy preloader for better LCP -->
-
-  <div id="mouse-follower"></div>
-
-  <header id="header" class="fixed w-full top-0 z-50 transition-all duration-300 py-4" role="banner">
-    <div class="container mx-auto px-6 flex justify-between items-center">
+  <!-- Header -->
+  <header id="header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
       <a href="#" class="h-10 inline-flex items-center" aria-label="דף הבית KD-ICT">
-        <img
-          src="https://storage.googleapis.com/aide-user-images/logo_crop_from_image.png"
-          alt="לוגו KD-ICT"
-          class="h-full w-auto"
-          width="250" height="80"
-          decoding="async"
-          fetchpriority="high"
-        />
+        <img src="https://storage.googleapis.com/aide-user-images/logo_crop_from_image.png" alt="לוגו KD-ICT" class="h-10 w-auto" width="250" height="80" decoding="async" fetchpriority="high" />
       </a>
 
-      <nav class="hidden md:flex items-center space-x-reverse space-x-8" aria-label="תפריט ראשי">
-        <a href="#services" class="text-gray-700 hover:text-blue-600 font-medium transition">שירותים</a>
-        <a href="#methodology" class="text-gray-700 hover:text-blue-600 font-medium transition">מתודולוגיה</a>
-        <a href="#case-studies" class="text-gray-700 hover:text-blue-600 font-medium transition">פרויקטים</a>
-        <a href="#contact" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition shadow-md hover:shadow-lg shine-button">צור קשר</a>
+      <nav class="hidden md:flex items-center gap-8" aria-label="תפריט ראשי">
+        <a href="#services" class="text-slate-700 hover:text-primary font-medium transition">שירותים</a>
+        <a href="#methodology" class="text-slate-700 hover:text-primary font-medium transition">מתודולוגיה</a>
+        <a href="#case-studies" class="text-slate-700 hover:text-primary font-medium transition">פרויקטים</a>
+        <a href="#about" class="text-slate-700 hover:text-primary font-medium transition">אודות</a>
+        <a href="#contact" class="bg-primary text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition shadow-md hover:shadow-glow shine-button">צור קשר</a>
       </nav>
 
-      <div class="md:hidden">
-        <button id="mobile-menu-button"
-                class="text-gray-800 focus:outline-none"
-                aria-label="פתיחת תפריט"
-                aria-expanded="false"
-                aria-controls="mobile-menu">
-          <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
-        </button>
-      </div>
+      <button id="mobile-menu-button" class="md:hidden text-slate-900 text-2xl" aria-expanded="false" aria-controls="mobile-menu" aria-label="פתיחת תפריט">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
 
-    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl" role="navigation" aria-label="תפריט נייד">
-      <a href="#services" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">שירותים</a>
-      <a href="#methodology" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">מתודולוגיה</a>
-      <a href="#case-studies" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">פרויקטים</a>
-      <a href="#contact" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">צור קשר</a>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-xl" role="navigation" aria-label="תפריט נייד">
+      <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col">
+        <a href="#services" class="py-3 text-slate-700 hover:bg-slate-50 rounded">שירותים</a>
+        <a href="#methodology" class="py-3 text-slate-700 hover:bg-slate-50 rounded">מתודולוגיה</a>
+        <a href="#case-studies" class="py-3 text-slate-700 hover:bg-slate-50 rounded">פרויקטים</a>
+        <a href="#about" class="py-3 text-slate-700 hover:bg-slate-50 rounded">אודות</a>
+        <a href="#contact" class="py-3 text-white bg-primary hover:bg-blue-700 rounded text-center font-bold">צור קשר</a>
+      </div>
     </div>
   </header>
 
   <main id="main-content">
+
     <!-- Hero -->
-    <section class="relative h-[80vh] md:h-screen flex items-center justify-center text-white text-center section-gradient-dark">
-      <div class="container mx-auto px-6 z-10">
-        <h1 class="text-4xl md:text-7xl font-extrabold mb-4" style="text-shadow: 2px 2px 12px rgba(0,0,0,0.5);">
-          יוצרים הצלחה טכנולוגית
-        </h1>
-        <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-blue-200" style="text-shadow: 1px 1px 8px rgba(0,0,0,0.5);">
-          מתכנון אסטרטגי ועד אינטגרציה מלאה, אנחנו השותפים שלכם לחדשנות.
-        </p>
-        <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg shine-button group">
-          בואו נדבר
-          <i class="fas fa-arrow-left mr-2 transform group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
-        </a>
+    <section class="relative pt-28 md:pt-36 pb-20 md:pb-28 text-white bg-hero-gradient overflow-hidden">
+      <!-- subtle grid -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:40px_40px]"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
+              יוצרים <span class="text-accent">הצלחה</span> טכנולוגית
+            </h1>
+            <p class="text-blue-100/90 text-lg md:text-xl mb-8">
+              מתכנון אסטרטגי ועד אינטגרציה מלאה — KD-ICT היא השותפה שלכם לפרויקטי IT, סייבר, תשתיות ו-IoT שמצליחים בזמן ובתקציב.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <a href="#contact" class="shine-button inline-flex items-center justify-center bg-white text-primary font-bold px-6 py-3 rounded-full shadow-glow hover:translate-y-[-1px] transition">
+                בואו נדבר <i class="fa-solid fa-arrow-left mr-3"></i>
+              </a>
+              <a href="#case-studies" class="inline-flex items-center justify-center border border-white/30 text-white font-bold px-6 py-3 rounded-full hover:bg-white/10 transition">
+                סיפורי לקוח
+              </a>
+            </div>
+
+            <!-- KPI counters -->
+            <div class="mt-10 grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div class="text-3xl md:text-4xl font-extrabold odometer" data-target="120">0</div>
+                <div class="text-blue-100 mt-1">פרויקטים</div>
+              </div>
+              <div>
+                <div class="text-3xl md:text-4xl font-extrabold odometer" data-target="98">0</div>
+                <div class="text-blue-100 mt-1">שביעות רצון %</div>
+              </div>
+              <div>
+                <div class="text-3xl md:text-4xl font-extrabold odometer" data-target="15">0</div>
+                <div class="text-blue-100 mt-1">שנות ניסיון</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero card -->
+          <div class="relative">
+            <div class="rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl p-6 md:p-8 shadow-2xl">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-accent/90 text-slate-900 flex items-center justify-center text-2xl shadow">
+                  <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div>
+                  <p class="text-blue-100 text-sm">שקיפות ובקרה</p>
+                  <h3 class="text-2xl font-bold">דוח התקדמות שבועי</h3>
+                </div>
+              </div>
+
+              <ul class="space-y-3 text-blue-100">
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> לוחות זמנים ו-Milestones</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> ניהול סיכונים ו-RACI</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> QA/UAT ותכנית הקשחה</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> SLA ותמיכה מתמשך</li>
+              </ul>
+
+              <a href="#lead-magnet" class="mt-6 inline-flex items-center justify-center w-full bg-accent text-slate-900 font-bold py-3 rounded-xl hover:brightness-95 transition">
+                קבלו מדריך בחינם
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="shape-divider" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M0,53.24C300,53.24,600,53.24,1200,53.24V120H0Z" class="shape-fill-light"></path>
-        </svg>
-      </div>
+
+      <!-- bottom wave -->
+      <svg class="absolute bottom-0 left-0 right-0" height="96" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,40 C300,80 900,0 1200,40 L1200,120 L0,120 Z" fill="#f7fafc"></path>
+      </svg>
     </section>
 
     <!-- Clients -->
-    <section class="py-16 bg-gray-100 border-b border-gray-200">
-      <div class="container mx-auto px-6">
-        <h3 class="text-center text-gray-500 font-semibold text-lg mb-6">סומכים עלינו - במגזר העסקי והציבורי</h3>
+    <section class="py-14 bg-slate-50 border-y border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <h3 class="text-center text-slate-500 font-semibold text-base mb-6">סומכים עלינו — במגזר העסקי והציבורי</h3>
         <div class="swiper client-swiper" aria-label="קרוסלת לוגואים של לקוחות">
           <div class="swiper-wrapper items-center">
-            <!-- דוגמת לוגו עם picture + webp -->
-            <div class="swiper-slide text-center">
-              <picture>
-                <source type="image/avif" srcset="https://placehold.co/300x120/eeeeee/a0aec0.avif?text=Client+A 2x, https://placehold.co/150x60/eeeeee/a0aec0.avif?text=Client+A 1x" />
-                <source type="image/webp" srcset="https://placehold.co/300x120/eeeeee/a0aec0.webp?text=Client+A 2x, https://placehold.co/150x60/eeeeee/a0aec0.webp?text=Client+A 1x" />
-                <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+A"
-                     alt="לקוח A"
-                     class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100"
-                     width="150" height="60"
-                     loading="lazy" decoding="async" />
-              </picture>
-            </div>
-
-            <!-- שכפל/עדכן לשאר הלוגואים -->
-            <div class="swiper-slide text-center">
-              <picture>
-                <source type="image/webp" srcset="https://placehold.co/150x60/f0f0f0/a0aec0.webp?text=Client+B" />
-                <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+B" alt="לקוח B" class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100" width="150" height="60" loading="lazy" decoding="async" />
-              </picture>
-            </div>
-            <div class="swiper-slide text-center">
-              <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+C" alt="לקוח C" class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100" width="150" height="60" loading="lazy" decoding="async" />
-            </div>
-            <div class="swiper-slide text-center">
-              <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+D" alt="לקוח D" class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100" width="150" height="60" loading="lazy" decoding="async" />
-            </div>
-            <div class="swiper-slide text-center">
-              <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+E" alt="לקוח E" class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100" width="150" height="60" loading="lazy" decoding="async" />
-            </div>
-            <div class="swiper-slide text-center">
-              <img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+F" alt="לקוח F" class="mx-auto h-12 filter grayscale hover:grayscale-0 transition duration-300 opacity-70 hover:opacity-100" width="150" height="60" loading="lazy" decoding="async" />
-            </div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+A" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח A" width="150" height="60" loading="lazy"></div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+B" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח B" width="150" height="60" loading="lazy"></div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+C" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח C" width="150" height="60" loading="lazy"></div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+D" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח D" width="150" height="60" loading="lazy"></div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+E" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח E" width="150" height="60" loading="lazy"></div>
+            <div class="swiper-slide text-center"><img src="https://placehold.co/150x60/f0f0f0/a0aec0?text=Client+F" class="mx-auto h-12 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition" alt="לקוח F" width="150" height="60" loading="lazy"></div>
           </div>
-          <!-- A11y pagination -->
           <div class="swiper-pagination" aria-label="עמוד קרוסלה"></div>
         </div>
       </div>
     </section>
 
     <!-- Services -->
-    <section id="services" class="py-24 section-gradient-light">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">ההתמחות שלנו, ההצלחה שלכם</h2>
-          <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">מגוון פתרונות טכנולוגיים תחת קורת גג אחת.</p>
+    <section id="services" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-14">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">ההתמחות שלנו, ההצלחה שלכם</h2>
+          <p class="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">מגוון פתרונות טכנולוגיים תחת קורת גג אחת.</p>
         </div>
 
         <div class="bento-grid">
-          <div class="bento-item col-span-2">
-            <div class="bento-card flex flex-col justify-between bg-blue-800 text-white will-change-transform">
-              <div>
-                <div class="bg-blue-600 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-server text-3xl animated-icon"></i></div>
-                <h3 class="text-3xl font-bold mb-3">ניהול ותכנון פרויקטים</h3>
-                <p class="text-blue-100 text-lg">
-                  ניהול קצה־לקצה לפרויקטים מורכבים: דאטה סנטר, תשתיות תקשורת, IoT — עמידה ביעדים, בתקציב ובלוחות הזמנים.
-                </p>
-              </div>
+          <div class="bento-item">
+            <div class="bento-card h-full">
+              <div class="bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-diagram-project text-2xl text-primary animated-icon"></i></div>
+              <h3 class="text-2xl font-bold mb-3">ניהול ותכנון פרויקטים</h3>
+              <p class="text-slate-600">ניהול קצה־לקצה לפרויקטים מורכבים: דאטה סנטר, תקשורת, IoT — עם בקרה הדוקה ו-KPI ברורים.</p>
             </div>
           </div>
 
           <div class="bento-item">
-            <div class="bento-card will-change-transform">
-              <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-file-signature text-3xl text-blue-500 animated-icon"></i></div>
+            <div class="bento-card h-full">
+              <div class="bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-file-signature text-2xl text-primary animated-icon"></i></div>
               <h3 class="text-2xl font-bold mb-3">כתיבה וניהול מכרזים</h3>
-              <p class="text-gray-600">RFP/SOW, ניתוח, תמחור וניהול תהליכי התקשרות.</p>
+              <p class="text-slate-600">RFP/SOW, ניתוח, תמחור וניהול התקשרויות עד חתימה ומעבר לביצוע.</p>
             </div>
           </div>
 
           <div class="bento-item">
-            <div class="bento-card will-change-transform">
-              <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-shield-halved text-3xl text-blue-500 animated-icon"></i></div>
+            <div class="bento-card h-full">
+              <div class="bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mb-6" aria-hidden="true"><i class="fas fa-shield-halved text-2xl text-primary animated-icon"></i></div>
               <h3 class="text-2xl font-bold mb-3">ליווי פרויקטי סייבר</h3>
-              <p class="text-gray-600">יישום והטמעת פתרונות אבטחת מידע בהתאם לתקנים מחמירים.</p>
+              <p class="text-slate-600">אבטחת מידע לפי תקנים (למשל ISO 27001), סקירות פערים, הקשחה ו-SOC אינטגרציה.</p>
             </div>
           </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-12">
+          <a href="#contact" class="inline-flex items-center bg-primary text-white px-8 py-3 rounded-full font-bold shadow-glow hover:-translate-y-0.5 transition shine-button">נתחיל בשיחה קצרה</a>
         </div>
       </div>
     </section>
 
-    <!-- Why Us (Improvement #8) -->
-    <section id="why-us" class="py-24 bg-white">
-      <div class="container mx-auto px-6">
+    <!-- Why Us -->
+    <section id="why-us" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-12">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">למה לבחור ב-KD-ICT?</h2>
-          <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">יתרונות שמתרגמים לתוצאות בשטח.</p>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">למה לבחור ב-KD-ICT?</h2>
+          <p class="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">יתרונות שמתרגמים לתוצאות בשטח.</p>
         </div>
 
         <div class="grid gap-6 md:grid-cols-4">
-          <div class="p-6 rounded-xl border border-gray-200 bg-gray-50">
-            <div class="text-3xl text-blue-600 mb-3" aria-hidden="true"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-3xl text-primary mb-3" aria-hidden="true"><i class="fa-solid fa-user-tie"></i></div>
             <h3 class="font-bold text-xl mb-2">ניסיון מוכח</h3>
-            <p class="text-gray-600">פרויקטים במגזר הציבורי והעסקי, עם תלות גבוהה באיכות ובאמינות.</p>
+            <p class="text-slate-600">פרויקטים במגזר הציבורי והעסקי עם תלות גבוהה באיכות ובאמינות.</p>
           </div>
-          <div class="p-6 rounded-xl border border-gray-200 bg-gray-50">
-            <div class="text-3xl text-blue-600 mb-3" aria-hidden="true"><i class="fa-solid fa-clipboard-check"></i></div>
+          <div class="p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-3xl text-primary mb-3" aria-hidden="true"><i class="fa-solid fa-clipboard-check"></i></div>
             <h3 class="font-bold text-xl mb-2">SLA ושקיפות</h3>
-            <p class="text-gray-600">מסגרת שירות ברורה, בקרה שוטפת ודיווחי התקדמות.</p>
+            <p class="text-slate-600">מסגרת שירות ברורה, דוחות סטטוס, ומדידה רציפה של KPI.</p>
           </div>
-          <div class="p-6 rounded-xl border border-gray-200 bg-gray-50">
-            <div class="text-3xl text-blue-600 mb-3" aria-hidden="true"><i class="fa-solid fa-plug-circle-check"></i></div>
+          <div class="p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-3xl text-primary mb-3" aria-hidden="true"><i class="fa-solid fa-plug-circle-check"></i></div>
             <h3 class="font-bold text-xl mb-2">אינטגרציה חלקה</h3>
-            <p class="text-gray-600">תיאום בין ספקים וקבלני משנה עד למסירה מלאה.</p>
+            <p class="text-slate-600">תיאום ספקים וקבלני משנה עד למסירה מלאה ואבטחת איכות.</p>
           </div>
-          <div class="p-6 rounded-xl border border-gray-200 bg-gray-50">
-            <div class="text-3xl text-blue-600 mb-3" aria-hidden="true"><i class="fa-solid fa-shield"></i></div>
+          <div class="p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-3xl text-primary mb-3" aria-hidden="true"><i class="fa-solid fa-shield"></i></div>
             <h3 class="font-bold text-xl mb-2">אבטחה כסטנדרט</h3>
-            <p class="text-gray-600">הטמעת אבטחת מידע כחלק מתהליך הפיתוח וההשקה.</p>
+            <p class="text-slate-600">Security-by-Design לאורך כל מחזור החיים של המערכת.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Methodology (Tabs with ARIA) -->
+    <!-- Methodology (Tabs) -->
     <section id="methodology" class="py-24 bg-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">המתודולוגיה שלנו להצלחה</h2>
-          <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">תהליך סדור ושקוף שמבטיח תוצאות.</p>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-14">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">המתודולוגיה שלנו להצלחה</h2>
+          <p class="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">תהליך סדור ושקוף שמבטיח תוצאות.</p>
         </div>
 
         <div role="tablist" aria-label="שלבי מתודולוגיה" class="grid md:grid-cols-4 gap-4 mb-8 text-center">
-          <button role="tab" id="tab-1" data-tab="1" aria-controls="panel-1" aria-selected="true" tabindex="0" class="method-tab p-4 rounded-lg font-bold transition active bg-gray-200">1. אפיון וייעוץ</button>
-          <button role="tab" id="tab-2" data-tab="2" aria-controls="panel-2" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-gray-200">2. תכנון מפורט</button>
-          <button role="tab" id="tab-3" data-tab="3" aria-controls="panel-3" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-gray-200">3. ביצוע ואינטגרציה</button>
-          <button role="tab" id="tab-4" data-tab="4" aria-controls="panel-4" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-gray-200">4. בקרה ותמיכה</button>
+          <button role="tab" id="tab-1" data-tab="1" aria-controls="panel-1" aria-selected="true" tabindex="0" class="method-tab p-4 rounded-lg font-bold transition active bg-slate-200">1. אפיון וייעוץ</button>
+          <button role="tab" id="tab-2" data-tab="2" aria-controls="panel-2" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-slate-200">2. תכנון מפורט</button>
+          <button role="tab" id="tab-3" data-tab="3" aria-controls="panel-3" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-slate-200">3. ביצוע ואינטגרציה</button>
+          <button role="tab" id="tab-4" data-tab="4" aria-controls="panel-4" aria-selected="false" tabindex="-1" class="method-tab p-4 rounded-lg font-bold transition bg-slate-200">4. בקרה ותמיכה</button>
         </div>
 
-        <div class="bg-gray-50 border border-gray-200 p-8 rounded-xl min-h-[200px]">
+        <div class="bg-slate-50 border border-slate-200 p-8 rounded-xl min-h-[200px]">
           <div id="panel-1" class="method-content active" role="tabpanel" aria-labelledby="tab-1">
-            <h3 class="text-2xl font-bold text-blue-600 mb-3">אפיון וייעוץ אסטרטגי</h3>
-            <p class="text-lg text-gray-700">אנו מתחילים בהקשבה... בניית תוכנית אסטרטגית לבסיס פרויקט מוצלח.</p>
+            <h3 class="text-2xl font-bold text-primary mb-3">אפיון וייעוץ אסטרטגי</h3>
+            <p class="text-lg text-slate-700">הקשבה לצרכים, מיפוי תהליכים וסיכונים, בניית Roadmap עם יעדים מדידים.</p>
           </div>
           <div id="panel-2" class="method-content" role="tabpanel" aria-labelledby="tab-2">
-            <h3 class="text-2xl font-bold text-blue-600 mb-3">תכנון מפורט</h3>
-            <p class="text-lg text-gray-700">תרגום האסטרטגיה לתוכנית עבודה: ארכיטקטורה, טכנולוגיות, לו"ז ותקציב.</p>
+            <h3 class="text-2xl font-bold text-primary mb-3">תכנון מפורט</h3>
+            <p class="text-lg text-slate-700">ארכיטקטורה, בחירת טכנולוגיות, גאנט, תקציב, RACI ו-Plan להקשחה.</p>
           </div>
           <div id="panel-3" class="method-content" role="tabpanel" aria-labelledby="tab-3">
-            <h3 class="text-2xl font-bold text-blue-600 mb-3">ביצוע ואינטגרציה</h3>
-            <p class="text-lg text-gray-700">ניהול ביצוע, תאום ספקים וקבלני משנה, אינטגרציה איכותית.</p>
+            <h3 class="text-2xl font-bold text-primary mb-3">ביצוע ואינטגרציה</h3>
+            <p class="text-lg text-slate-700">ניהול ספקים, בקרת איכות, אינטגרציה מבוקרת והכנה ל-UAT.</p>
           </div>
           <div id="panel-4" class="method-content" role="tabpanel" aria-labelledby="tab-4">
-            <h3 class="text-2xl font-bold text-blue-600 mb-3">בקרה ותמיכה</h3>
-            <p class="text-lg text-gray-700">UAT, הדרכות, תמיכה ותחזוקה שוטפת לאיכות מתמשכת.</p>
+            <h3 class="text-2xl font-bold text-primary mb-3">בקרה ותמיכה</h3>
+            <p class="text-lg text-slate-700">UAT, הדרכות, תיעוד, DevOps/Monitoring, SLA ותמיכה מתמשכת.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Case Studies -->
-    <section id="case-studies" class="py-24 section-gradient-light">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">ההצלחה שלהם, הסיפור שלנו</h2>
-          <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">דוגמאות מהשטח לאתגרים שהפכנו להזדמנויות.</p>
+    <section id="case-studies" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-14">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">ההצלחה שלהם, הסיפור שלנו</h2>
+          <p class="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">דוגמאות מהשטח לאתגרים שהפכנו להזדמנויות.</p>
         </div>
 
         <div class="swiper case-study-swiper relative pb-12" aria-label="קרוסלת סיפורי לקוח">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <div class="bg-white rounded-lg overflow-hidden shadow-lg h-full border border-gray-200">
-                <picture>
-                  <source type="image/webp" srcset="https://placehold.co/1200x800/003366/FFFFFF.webp?text=%D7%A4%D7%A8%D7%95%D7%99%D7%A7%D7%98+%D7%AA%D7%A9%D7%AA%D7%99%D7%95%D7%AA 1200w, https://placehold.co/800x533/003366/FFFFFF.webp?text=%D7%A4%D7%A8%D7%95%D7%99%D7%A7%D7%98+%D7%AA%D7%A9%D7%AA%D7%99%D7%95%D7%AA 800w" sizes="(max-width:640px) 100vw, 33vw" />
-                  <img src="https://placehold.co/600x400/003366/FFFFFF?text=פרויקט+תשתיות"
-                       alt="תשתיות ודאטה סנטר — הקמת מרכז מחשוב"
-                       class="w-full h-48 object-cover"
-                       width="600" height="400" loading="lazy" decoding="async" />
-                </picture>
+              <article class="bg-white rounded-xl overflow-hidden shadow-sm h-full border border-slate-200">
+                <img src="https://placehold.co/800x480/003366/FFFFFF?text=Data+Center" alt="תשתיות ודאטה סנטר — הקמת מרכז מחשוב" class="w-full h-48 object-cover" width="800" height="480" loading="lazy" decoding="async" />
                 <div class="p-6">
-                  <p class="text-blue-600 font-semibold text-sm mb-1">תשתיות ודאטה סנטר</p>
-                  <h3 class="text-xl font-bold mb-3">הקמת מרכז מחשוב עבור חברה פיננסית</h3>
-                  <p class="text-gray-600">תכנון וביצוע מקצה לקצה של דאטה סנטר מודרני.</p>
+                  <p class="text-primary font-semibold text-sm mb-1">תשתיות ודאטה סנטר</p>
+                  <h3 class="text-xl font-bold mb-2">הקמת מרכז מחשוב לחברה פיננסית</h3>
+                  <p class="text-slate-600">תכנון וביצוע מקצה לקצה של דאטה סנטר מודרני, עם N+1 ורציפות עסקית.</p>
                 </div>
-              </div>
+              </article>
             </div>
 
             <div class="swiper-slide">
-              <div class="bg-white rounded-lg overflow-hidden shadow-lg h-full border border-gray-200">
-                <img src="https://placehold.co/600x400/36454F/FFFFFF?text=פרויקט+סייבר"
-                     alt="שדרוג מערך הסייבר במוסד ציבורי"
-                     class="w-full h-48 object-cover"
-                     width="600" height="400" loading="lazy" decoding="async" />
+              <article class="bg-white rounded-xl overflow-hidden shadow-sm h-full border border-slate-200">
+                <img src="https://placehold.co/800x480/36454F/FFFFFF?text=Cyber" alt="שדרוג מערך הסייבר במוסד ציבורי" class="w-full h-48 object-cover" width="800" height="480" loading="lazy" decoding="async" />
                 <div class="p-6">
-                  <p class="text-blue-600 font-semibold text-sm mb-1">אבטחת מידע</p>
-                  <h3 class="text-xl font-bold mb-3">שדרוג מערך הסייבר במוסד ציבורי</h3>
-                  <p class="text-gray-600">הטמעת מערכות הגנה מתקדמות וליווי הצוותים.</p>
+                  <p class="text-primary font-semibold text-sm mb-1">אבטחת מידע</p>
+                  <h3 class="text-xl font-bold mb-2">שדרוג מערך הסייבר במוסד ציבורי</h3>
+                  <p class="text-slate-600">הטמעת פתרונות XDR/SIEM, הדרכות צוות ותהליך תגובה לאירועים.</p>
                 </div>
-              </div>
+              </article>
             </div>
 
             <div class="swiper-slide">
-              <div class="bg-white rounded-lg overflow-hidden shadow-lg h-full border border-gray-200">
-                <img src="https://placehold.co/600x400/808080/FFFFFF?text=פרויקט+עיר+חכמה"
-                     alt="פרויקט IoT לניהול תנועה בעירייה"
-                     class="w-full h-48 object-cover"
-                     width="600" height="400" loading="lazy" decoding="async" />
+              <article class="bg-white rounded-xl overflow-hidden shadow-sm h-full border border-slate-200">
+                <img src="https://placehold.co/800x480/808080/FFFFFF?text=Smart+City" alt="פרויקט IoT לניהול תנועה בעירייה" class="w-full h-48 object-cover" width="800" height="480" loading="lazy" decoding="async" />
                 <div class="p-6">
-                  <p class="text-blue-600 font-semibold text-sm mb-1">עיר חכמה</p>
-                  <h3 class="text-xl font-bold mb-3">פרויקט IoT לניהול תנועה בעירייה</h3>
-                  <p class="text-gray-600">פריסת רשת חיישנים וניתוח נתונים לשיפור זרימת התנועה.</p>
+                  <p class="text-primary font-semibold text-sm mb-1">עיר חכמה</p>
+                  <h3 class="text-xl font-bold mb-2">IoT לניהול תנועה עירוני</h3>
+                  <p class="text-slate-600">פריסת חיישנים, עיבוד נתונים בזמן אמת ושיפור זמני נסיעה.</p>
                 </div>
-              </div>
-            </div>
-
-            <div class="swiper-slide">
-              <div class="bg-white rounded-lg overflow-hidden shadow-lg h-full border border-gray-200">
-                <img src="https://placehold.co/600x400/4B0082/FFFFFF?text=פרויקט+מולטימדיה"
-                     alt="הקמת אודיטוריום חכם באוניברסיטה"
-                     class="w-full h-48 object-cover"
-                     width="600" height="400" loading="lazy" decoding="async" />
-                <div class="p-6">
-                  <p class="text-blue-600 font-semibold text-sm mb-1">מולטימדיה</p>
-                  <h3 class="text-xl font-bold mb-3">הקמת אודיטוריום חכם באוניברסיטה</h3>
-                  <p class="text-gray-600">שילוב מערכות סאונד, וידאו ותאורה חכמות.</p>
-                </div>
-              </div>
+              </article>
             </div>
           </div>
 
-          <!-- A11y Navigation Buttons -->
-          <button class="case-prev absolute top-1/2 -right-3 transform -translate-y-1/2 bg-white/90 border border-gray-200 rounded-full w-10 h-10 shadow flex items-center justify-center"
-                  aria-label="הקודם">
-            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <!-- Nav -->
+          <button class="case-prev absolute top-1/2 -right-3 -translate-y-1/2 bg-white/90 border border-slate-200 rounded-full w-10 h-10 shadow flex items-center justify-center" aria-label="הקודם">
+            <i class="fa-solid fa-chevron-right"></i>
           </button>
-          <button class="case-next absolute top-1/2 -left-3 transform -translate-y-1/2 bg-white/90 border border-gray-200 rounded-full w-10 h-10 shadow flex items-center justify-center"
-                  aria-label="הבא">
-            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+          <button class="case-next absolute top-1/2 -left-3 -translate-y-1/2 bg-white/90 border border-slate-200 rounded-full w-10 h-10 shadow flex items-center justify-center" aria-label="הבא">
+            <i class="fa-solid fa-chevron-left"></i>
           </button>
 
-          <div class="swiper-pagination" aria-label="עמוד קרוסלה"></div>
+          <div class="swiper-pagination"></div>
         </div>
       </div>
     </section>
 
     <!-- Lead magnet -->
-    <section id="lead-magnet" class="py-20 bg-blue-900 text-white">
-      <div class="container mx-auto px-6 text-center">
-        <i class="fas fa-file-pdf text-6xl mb-4 text-blue-300" aria-hidden="true"></i>
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">5 טעויות נפוצות בבחירת ספק IT</h2>
-        <p class="text-blue-200 max-w-2xl mx-auto mb-8">קבלו בחינם את המדריך המקצועי שלנו שיעזור לכם לקבל את ההחלטה הנכונה לפרויקט הבא שלכם.</p>
-        <button id="open-lead-modal" class="bg-white text-blue-800 font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg shine-button">
+    <section id="lead-magnet" class="py-20 bg-primary text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <i class="fas fa-file-pdf text-6xl mb-4 text-blue-200" aria-hidden="true"></i>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-3">5 טעויות נפוצות בבחירת ספק IT</h2>
+        <p class="text-blue-100 max-w-2xl mx-auto mb-8">קבלו בחינם את המדריך שיעזור לכם לקבל החלטה חכמה בפרויקט הבא.</p>
+        <button id="open-lead-modal" class="bg-white text-primary font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg shine-button">
           הורד את המדריך עכשיו
         </button>
       </div>
     </section>
 
-    <!-- FAQ (Improvement #8) -->
-    <section id="faq" class="py-24 bg-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-12">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">שאלות נפוצות</h2>
-          <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">עונים מראש על שאלות והסתייגויות.</p>
+    <!-- Testimonials -->
+    <section class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-14">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">מה לקוחות אומרים</h2>
+          <p class="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">אמינות, מקצועיות ותוצאות שמדברות.</p>
         </div>
 
-        <div class="max-w-3xl mx-auto divide-y divide-gray-200 border border-gray-200 rounded-xl">
+        <div class="swiper testimonial-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <figure class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <blockquote class="text-slate-700 leading-relaxed">“KD-ICT הובילו פרויקט תשתיות מורכב בלוחות זמנים צפופים — עם שקיפות מלאה וביצוע ללא פשרות.”</blockquote>
+                <figcaption class="mt-6 text-sm text-slate-500">דנה כהן, מנהלת IT, חברת פיננסים</figcaption>
+              </figure>
+            </div>
+            <div class="swiper-slide">
+              <figure class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <blockquote class="text-slate-700 leading-relaxed">“שילוב נדיר של ראייה מערכתית עמוקה ויכולות hands-on. חסכו לנו חודשים וכסף רב.”</blockquote>
+                <figcaption class="mt-6 text-sm text-slate-500">יוסי אלקיים, CTO, סטארטאפ IoT</figcaption>
+              </figure>
+            </div>
+            <div class="swiper-slide">
+              <figure class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <blockquote class="text-slate-700 leading-relaxed">“הטמעת מערך סייבר ותכנית תגובה לאירועים שהעלתה את רמת הביטחון הארגוני משמעותית.”</blockquote>
+                <figcaption class="mt-6 text-sm text-slate-500">שקד לוי, מוסד ציבורי</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="swiper-pagination mt-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">אודות KD-ICT</h2>
+            <p class="text-slate-700 text-lg leading-relaxed">
+              אנחנו צוות מומחים עם ניסיון רב-שנים בניהול תכניות מורכבות, הטמעת מערכות ארגוניות ואינטגרציה בין-מערכתית.
+              ה-DNA שלנו משלב משמעת הנדסית עם גמישות עסקית.
+            </p>
+            <ul class="mt-6 space-y-3 text-slate-700">
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> PMO ו-Program Management</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> Enterprise Architecture</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> DevOps, Observability &amp; Security</li>
+            </ul>
+          </div>
+          <div class="relative">
+            <div class="rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+              <img src="https://placehold.co/1000x700/0D47A1/FFFFFF?text=KD-ICT" alt="צוות KD-ICT" class="w-full h-auto" loading="lazy" decoding="async" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">שאלות נפוצות</h2>
+          <p class="text-slate-600 mt-4 text-lg">עונים מראש על שאלות והסתייגויות.</p>
+        </div>
+
+        <div class="divide-y divide-slate-200 border border-slate-200 rounded-xl">
           <details class="p-6 group">
-            <summary class="flex items-center justify-between cursor-pointer font-bold text-gray-800">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
               איך נראה תהליך ההתקשרות וה-SOW?
-              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
             </summary>
-            <div class="mt-3 text-gray-700">מגדירים יעדים, תוצרים, לוחות זמנים, KPI ו-SLA — הכל מתועד במסמך SOW חתום.</div>
+            <div class="mt-3 text-slate-700">יעדים, תוצרים, גאנט, KPI ו-SLA — מתועדים במסמך SOW חתום.</div>
           </details>
 
           <details class="p-6 group">
-            <summary class="flex items-center justify-between cursor-pointer font-bold text-gray-800">
-              האם אתם עובדים עם ספקים חיצוניים?
-              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
+              האם עובדים עם ספקים חיצוניים?
+              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
             </summary>
-            <div class="mt-3 text-gray-700">כן. אנו מנהלים אינטגרציה ותיאום מלאים מול ספקים וקבלני משנה, תחת ניהול פרויקט מרכזי.</div>
+            <div class="mt-3 text-slate-700">כן. ניהול אינטגרציה ותיאום מול ספקים וקבלני משנה תחת PM מרכזי.</div>
           </details>
 
           <details class="p-6 group">
-            <summary class="flex items-center justify-between cursor-pointer font-bold text-gray-800">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
               מה לגבי אבטחת מידע וציות לתקנים?
-              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
             </summary>
-            <div class="mt-3 text-gray-700">פועלים לפי best practices ותקנים כמו ISO 27001, כולל תכנון בקרות והקשחת מערכות.</div>
+            <div class="mt-3 text-slate-700">Best-Practices ותקנים כמו ISO 27001, הקשחת סביבות ותכנון בקרות.</div>
           </details>
 
           <details class="p-6 group">
-            <summary class="flex items-center justify-between cursor-pointer font-bold text-gray-800">
-              איך נמדדת הצלחה (KPI)?
-              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
+              איך נמדדת הצלחה?
+              <span class="transition-transform group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
             </summary>
-            <div class="mt-3 text-gray-700">מוגדרים מדדים לפני היציאה לדרך (לוחות זמנים, זמינות, איכות, סיכונים) ומדווחים שקוף.</div>
+            <div class="mt-3 text-slate-700">KPI מוגדרים מראש (לו"ז, תקציב, איכות, סיכונים) עם דיווח שקוף.</div>
           </details>
         </div>
       </div>
     </section>
 
     <!-- Contact -->
-    <section id="contact" class="py-24 bg-white">
-      <div class="container mx-auto px-6">
+    <section id="contact" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-12">
-          <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">מוכנים להתחיל?</h2>
-          <p class="text-gray-600 mt-4 text-lg">השאירו פרטים וניצור קשר לייעוץ ראשוני, ללא התחייבות.</p>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">מוכנים להתחיל?</h2>
         </div>
-        <div class="max-w-lg mx-auto bg-white p-8 rounded-2xl border border-gray-200 shadow-2xl">
+        <div class="max-w-xl mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-2xl">
           <form id="contact-form" novalidate aria-label="טופס יצירת קשר">
-            <div class="relative mb-6">
+            <div class="mb-5">
               <label for="name" class="sr-only">שם מלא</label>
-              <input type="text" id="name" name="name" class="block w-full px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition" placeholder="שם מלא" required autocomplete="name" />
+              <input type="text" id="name" name="name" class="block w-full px-4 py-3 text-slate-900 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-primary transition" placeholder="שם מלא" required autocomplete="name" />
             </div>
-            <div class="relative mb-6">
+            <div class="mb-5">
               <label for="email" class="sr-only">כתובת מייל</label>
-              <input type="email" id="email" name="email" class="block w-full px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition" placeholder="כתובת מייל" dir="ltr" required autocomplete="email" inputmode="email" />
+              <input type="email" id="email" name="email" class="block w-full px-4 py-3 text-slate-900 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-primary transition" placeholder="כתובת מייל" dir="ltr" required autocomplete="email" inputmode="email" />
             </div>
-            <div class="relative mb-6">
+            <div class="mb-5">
               <label for="message" class="sr-only">הודעה</label>
-              <textarea id="message" name="message" rows="4" class="block w-full px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition" placeholder="איך נוכל לעזור?" required></textarea>
+              <textarea id="message" name="message" rows="4" class="block w-full px-4 py-3 text-slate-900 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-primary transition" placeholder="איך נוכל לעזור?" required></textarea>
             </div>
-
-            <!-- honeypot anti-spam -->
+            <!-- Honeypot -->
             <div class="hidden">
               <label for="company">Company</label>
               <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
             </div>
 
-            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-lg px-5 py-3.5 text-center transition duration-300 shine-button">
-              שלח פניה
+            <button type="submit" class="w-full text-white bg-primary hover:bg-blue-700 font-bold rounded-lg text-lg px-5 py-3.5 text-center transition shine-button">
+              שלח פנייה
             </button>
             <p id="form-success-message" class="text-green-700 mt-4 text-center hidden font-semibold" role="status" aria-live="polite">
               תודה! הפנייה נשלחה בהצלחה.
+            </p>
+            <p id="form-error-message" class="text-red-600 mt-3 text-center hidden font-semibold" role="alert">
+              שגיאה בשליחה. נסו שוב.
             </p>
           </form>
         </div>
@@ -533,57 +587,69 @@
     </section>
   </main>
 
-  <footer class="bg-gray-900 text-white" role="contentinfo">
-    <div class="container mx-auto px-6 py-12 text-center">
-      <img src="https://storage.googleapis.com/aide-user-images/logo_crop_from_image.png"
-           alt="KD-ICT"
-           class="h-12 mx-auto mb-6"
-           width="250" height="80"
-           loading="lazy" decoding="async" />
-      <div class="flex justify-center space-x-reverse space-x-6 mb-6">
-        <a href="#services" class="text-gray-400 hover:text-white transition">שירותים</a>
-        <a href="#case-studies" class="text-gray-400 hover:text-white transition">פרויקטים</a>
-        <a href="#contact" class="text-gray-400 hover:text-white transition">צור קשר</a>
+  <footer class="bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-right">
+          <img src="https://storage.googleapis.com/aide-user-images/logo_crop_from_image.png" alt="KD-ICT" class="h-12 mx-auto md:mx-0 mb-4" width="250" height="80" loading="lazy" decoding="async" />
+          <p class="text-slate-400 text-sm">ק.ד – ניהול, תכנון ואינטגרציה בע"מ</p>
+        </div>
+        <nav class="flex justify-center gap-6">
+          <a href="#services" class="text-slate-300 hover:text-white transition">שירותים</a>
+          <a href="#case-studies" class="text-slate-300 hover:text-white transition">פרויקטים</a>
+          <a href="#contact" class="text-slate-300 hover:text-white transition">צור קשר</a>
+        </nav>
+        <div class="flex items-center justify-center gap-5" aria-label="קישורים לרשתות חברתיות">
+          <a href="#" class="text-slate-300 hover:text-white text-2xl transition" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="text-slate-300 hover:text-white text-2xl transition" aria-label="Facebook"><i class="fab fa-facebook-square"></i></a>
+        </div>
       </div>
-      <div class="flex justify-center space-x-reverse space-x-6 mb-8" aria-label="קישורים לרשתות חברתיות">
-        <a href="#" class="text-gray-400 hover:text-white text-2xl transition" aria-label="LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
-        <a href="#" class="text-gray-400 hover:text-white text-2xl transition" aria-label="Facebook"><i class="fab fa-facebook-square" aria-hidden="true"></i></a>
-      </div>
-      <p class="text-gray-500 text-sm">&copy; 2024 כל הזכויות שמורות לק.ד – ניהול תכנון ואינטגרציה בע"מ.</p>
+      <p class="text-slate-500 text-xs mt-8 text-center md:text-right">&copy; 2025 כל הזכויות שמורות.</p>
     </div>
   </footer>
 
   <!-- Lead modal -->
-  <div id="lead-modal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
-    <div class="bg-white rounded-lg shadow-2xl w-full max-w-md p-8 relative">
-      <button id="close-lead-modal" class="absolute top-4 left-4 text-gray-500 hover:text-gray-800 text-2xl" aria-label="סגירת חלון">&times;</button>
-      <h3 class="text-2xl font-bold text-center mb-4" id="lead-modal-title">כמעט שם!</h3>
-      <p class="text-center text-gray-600 mb-6">הזינו את הפרטים וקבלו את המדריך ישירות למייל.</p>
-      <form id="lead-form" aria-label="טופס קבלת מדריך">
-        <div class="relative mb-6">
+  <div id="lead-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative">
+      <button id="close-lead-modal" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 text-2xl" aria-label="סגירת חלון">&times;</button>
+      <h3 class="text-2xl font-bold text-center mb-2" id="lead-modal-title">כמעט שם!</h3>
+      <p class="text-center text-slate-600 mb-6">השאירו פרטים והמדריך בדרך אליכם למייל.</p>
+      <form id="lead-form" aria-label="טופס קבלת מדריך" novalidate>
+        <div class="mb-4">
           <label class="sr-only" for="lead-name">שם מלא</label>
-          <input id="lead-name" name="lead-name" type="text" class="block w-full px-4 py-3 border-2 rounded-lg" placeholder="שם מלא" required autocomplete="name" />
+          <input id="lead-name" name="lead-name" type="text" class="block w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-primary" placeholder="שם מלא" required autocomplete="name" />
         </div>
-        <div class="relative mb-6">
+        <div class="mb-6">
           <label class="sr-only" for="lead-email">כתובת מייל</label>
-          <input id="lead-email" name="lead-email" type="email" class="block w-full px-4 py-3 border-2 rounded-lg" placeholder="כתובת מייל" dir="ltr" required autocomplete="email" inputmode="email" />
+          <input id="lead-email" name="lead-email" type="email" class="block w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-primary" placeholder="כתובת מייל" dir="ltr" required autocomplete="email" inputmode="email" />
         </div>
-        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-lg px-5 py-3.5 text-center shine-button">
+        <button type="submit" class="w-full text-white bg-primary hover:bg-blue-700 font-bold rounded-lg text-lg px-5 py-3.5 text-center shine-button">
           שלח לי את המדריך
         </button>
+        <p id="lead-success" class="text-green-700 mt-4 text-center hidden font-semibold" role="status">תודה! המדריך בדרך אליך.</p>
       </form>
     </div>
+  </div>
+
+  <!-- Floating Actions -->
+  <div class="fixed bottom-4 left-4 flex flex-col gap-2 z-40">
+    <a href="https://wa.me/972501234567" target="_blank" rel="noopener" class="rounded-full bg-green-500 text-white w-12 h-12 flex items-center justify-center shadow-glow hover:scale-105 transition" aria-label="WhatsApp">
+      <i class="fa-brands fa-whatsapp text-2xl"></i>
+    </a>
+    <a href="tel:+972501234567" class="rounded-full bg-primary text-white w-12 h-12 flex items-center justify-center shadow-glow hover:scale-105 transition" aria-label="Call">
+      <i class="fa-solid fa-phone"></i>
+    </a>
   </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Header glass
+    // Header glass on scroll
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50));
 
-    // Mobile menu toggle with ARIA
+    // Mobile menu
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileMenuButton.addEventListener('click', () => {
@@ -598,39 +664,45 @@
       });
     });
 
-    // Mouse follower (respect reduced motion is handled in CSS)
-    const mouseFollower = document.getElementById('mouse-follower');
-    if (mouseFollower && window.matchMedia('(pointer:fine)').matches && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-      window.addEventListener('mousemove', e => {
-        requestAnimationFrame(() => {
-          mouseFollower.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
-        });
+    // Odometer-like counters (no external lib)
+    const counters = document.querySelectorAll('.odometer');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const duration = 1200;
+          const start = performance.now();
+          function tick(now){
+            const p = Math.min((now - start) / duration, 1);
+            el.textContent = Math.floor(p * target).toLocaleString('he-IL');
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          io.unobserve(el);
+        }
       });
-    }
+    }, {threshold: 0.4});
+    counters.forEach(c => io.observe(c));
 
-    // Bento gentle tilt (GPU-friendly)
-    const bentoItems = document.querySelectorAll('.bento-item');
+    // Bento tilt (respect reduced motion)
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReduced) {
-      bentoItems.forEach(item => {
+    if (!prefersReduced){
+      document.querySelectorAll('.bento-item').forEach(item => {
+        const card = item.querySelector('.bento-card');
         item.addEventListener('mousemove', e => {
-          const card = item.querySelector('.bento-card');
-          const { top, left, width, height } = card.getBoundingClientRect();
-          const x = (e.clientX - left - width / 2) / 20;
-          const y = (e.clientY - top - height / 2) / -20;
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left - r.width/2) / 25;
+          const y = (e.clientY - r.top - r.height/2) / -25;
           card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
         });
-        item.addEventListener('mouseleave', () => {
-          const card = item.querySelector('.bento-card');
-          card.style.transform = 'rotateY(0deg) rotateX(0deg)';
-        });
+        item.addEventListener('mouseleave', () => { card.style.transform = 'rotateY(0) rotateX(0)'; });
       });
     }
 
-    // Tabs with ARIA + keyboard support
+    // Tabs with keyboard support
     const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
-
     function activateTab(tab){
       tabs.forEach(t => { t.setAttribute('aria-selected','false'); t.classList.remove('active'); t.setAttribute('tabindex','-1'); });
       panels.forEach(p => p.classList.remove('active'));
@@ -641,7 +713,6 @@
       document.getElementById(`panel-${id}`).classList.add('active');
       tab.focus();
     }
-
     tabs.forEach(tab => {
       tab.addEventListener('click', () => activateTab(tab));
       tab.addEventListener('keydown', (e) => {
@@ -657,8 +728,8 @@
       });
     });
 
-    // Swipers with A11y
-    new Swiper('.client-swiper', {
+    // Swipers
+    const clients = new Swiper('.client-swiper', {
       loop: true,
       slidesPerView: 2,
       spaceBetween: 20,
@@ -668,7 +739,7 @@
       breakpoints: { 640:{slidesPerView:3}, 768:{slidesPerView:4}, 1024:{slidesPerView:6} }
     });
 
-    new Swiper('.case-study-swiper', {
+    const cases = new Swiper('.case-study-swiper', {
       slidesPerView: 1,
       spaceBetween: 30,
       a11y: { enabled: true },
@@ -677,30 +748,63 @@
       breakpoints: { 640:{slidesPerView:2}, 1024:{slidesPerView:3} }
     });
 
+    const testimonials = new Swiper('.testimonial-swiper', {
+      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 24,
+      autoplay: { delay: 3800, disableOnInteraction: false },
+      a11y: { enabled: true },
+      pagination: { el: '.testimonial-swiper .swiper-pagination', clickable: true },
+      breakpoints: { 768:{slidesPerView:2}, 1024:{slidesPerView:3} }
+    });
+
     // Lead modal
     const leadModal = document.getElementById('lead-modal');
     const openLeadModalBtn = document.getElementById('open-lead-modal');
     const closeLeadModalBtn = document.getElementById('close-lead-modal');
     openLeadModalBtn.addEventListener('click', () => { leadModal.classList.replace('hidden', 'flex'); });
     closeLeadModalBtn.addEventListener('click', () => { leadModal.classList.replace('flex', 'hidden'); });
+    leadModal.addEventListener('click', (e)=>{ if(e.target === leadModal){ leadModal.classList.replace('flex','hidden'); }});
     document.getElementById('lead-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      // TODO: שליחת דאטה לשרת/ווב־הוק
-      alert('תודה! המדריך בדרך אליך.');
-      leadModal.classList.replace('flex','hidden');
+      const name = document.getElementById('lead-name').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      if (!name || !email || !/^\S+@\S+\.\S+$/.test(email)){ return alert('בדקו את הפרטים ונסו שוב.'); }
+      // TODO: שליחת דאטה לשרת/ווב-הוק
+      document.getElementById('lead-success').classList.remove('hidden');
+      setTimeout(()=> leadModal.classList.replace('flex','hidden'), 1200);
     });
 
-    // Contact form with simple client validation + honeypot
+    // Contact form validation + honeypot
     const contactForm = document.getElementById('contact-form');
     const successMessage = document.getElementById('form-success-message');
-    contactForm.addEventListener('submit', (e) => {
+    const errorMessage = document.getElementById('form-error-message');
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      successMessage.classList.add('hidden');
+      errorMessage.classList.add('hidden');
+
       const honeypot = contactForm.querySelector('#company');
       if (honeypot && honeypot.value){ return; } // bot
-      // TODO: שליחה לשרת/ווב־הוק + ולידציה בצד שרת
-      successMessage.classList.remove('hidden');
-      contactForm.reset();
-      setTimeout(() => successMessage.classList.add('hidden'), 5000);
+
+      const formData = {
+        name: contactForm.name.value.trim(),
+        email: contactForm.email.value.trim(),
+        message: contactForm.message.value.trim()
+      };
+      if (!formData.name || !/^\S+@\S+\.\S+$/.test(formData.email) || !formData.message){
+        errorMessage.textContent = 'נא למלא את כל השדות כהלכה.'; errorMessage.classList.remove('hidden'); return;
+      }
+
+      try {
+        // TODO: החליפו ל-Webhook/Endpoint ממשי (למשל Zapier/Make/Cloud Function)
+        // await fetch('/api/contact', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(formData)});
+        successMessage.classList.remove('hidden');
+        contactForm.reset();
+        setTimeout(() => successMessage.classList.add('hidden'), 5000);
+      } catch (err) {
+        errorMessage.classList.remove('hidden');
+      }
     });
   });
   </script>
