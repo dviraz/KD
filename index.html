@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KD-ICT | פתרונות טכנולוגיים פורצי דרך</title>
+
+  <!-- SEO -->
+  <meta name="description" content="KD-ICT: ייעוץ, תכנון וניהול פרויקטים טכנולוגיים — תשתיות, סייבר, IoT ואינטגרציה מקצה לקצה." />
+  <link rel="canonical" href="https://www.kd-ict.example/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="KD-ICT | פתרונות טכנולוגיים פורצי דרך" />
+  <meta property="og:description" content="מהאפיון ועד האינטגרציה — השותפים שלכם לחדשנות, סייבר ואמינות אנטרפרייז." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.kd-ict.example/" />
+  <meta property="og:image" content="https://placehold.co/1200x630/png?text=KD-ICT" />
+
+  <!-- Preconnects -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Tailwind (CDN for demo). For production, compile a purged build. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#0D47A1' },
+            secondary: '#1976D2',
+            accent: '#FFC107',
+            ink: '#0b1224',
+            ok: '#16a34a',
+            bad: '#dc2626'
+          },
+          fontFamily: {
+            heebo: ['Heebo', 'system-ui', 'sans-serif'],
+            poppins: ['Poppins', 'Heebo', 'sans-serif']
+          },
+          boxShadow: {
+            glow: '0 14px 38px -16px rgba(13,71,161,.35)',
+            card: '0 22px 60px -24px rgba(2,6,23,.38)'
+          },
+          backgroundImage: {
+            'hero': 'linear-gradient(180deg, rgba(11,18,36,.92) 0%, rgba(11,18,36,.86) 30%, rgba(10,15,30,.82) 100%)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    html,body{scroll-behavior:smooth}
+    body{font-family:'Heebo',sans-serif;background:#f6f8fb;color:#0f172a}
+    h1,h2,h3,h4{font-family:'Poppins','Heebo',sans-serif;font-weight:800}
+
+    /* Sticky header */
+    #header.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);box-shadow:0 12px 32px -24px rgba(13,71,161,.45)}
+
+    /* Buttons */
+    .btn-primary{background:#FFC107;color:#0b1224;border-radius:9999px;padding:.9rem 1.4rem;font-weight:800;box-shadow:0 18px 36px -20px rgba(255,193,7,.9)}
+    .btn-primary:hover{filter:brightness(.95)}
+    .btn-secondary{background:#0D47A1;color:#fff;border-radius:9999px;padding:.85rem 1.3rem;font-weight:800;box-shadow:0 16px 36px -20px rgba(13,71,161,.8)}
+    .btn-secondary:hover{background:#0b3b86}
+    .btn-tertiary{color:#0D47A1;font-weight:800}
+
+    /* Focus */
+    :focus-visible{outline:3px solid #0D47A1;outline-offset:3px;border-radius:.5rem}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1;transform:translateY(0)}
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+    }
+
+    /* Cards */
+    .card{background:#fff;border:1px solid #e7edf6;border-radius:1.1rem;transition:transform .18s ease, box-shadow .18s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 26px 70px -26px rgba(13,71,161,.28)}
+
+    /* Clamp */
+    .clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+    /* Timeline (RTL) */
+    .timeline{position:relative}
+    .timeline::before{content:'';position:absolute;left:0;right:0;top:28px;height:4px;background:#e2e8f0;border-radius:9999px}
+    .timeline .dot{width:56px;height:56px;border-radius:9999px;background:#fff;border:4px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0D47A1;box-shadow:0 6px 18px -8px rgba(13,71,161,.35)}
+    .timeline .step.active .dot{border-color:#0D47A1}
+
+    /* Inputs with icons */
+    .input-wrap{position:relative}
+    .input-wrap i{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:#475569}
+    .input-wrap input,.input-wrap textarea,.input-wrap select{padding-inline-start:42px}
+
+    /* Section rhythm */
+    section{padding-top:5.2rem;padding-bottom:5.2rem}
+
+    /* Scroll progress bar */
+    #progress{position:fixed;inset-inline:0 0;top:0;height:4px;background:linear-gradient(90deg,#FFC107,#1976D2);transform-origin:0 50%;transform:scaleX(0);z-index:60}
+
+    /* Contrast helpers */
+    .on-image{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.45),0 0 1px rgba(0,0,0,.6)}
+    .glass-strong{background-color:rgba(255,255,255,.22);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.32)}
+    .on-dark{color:rgba(255,255,255,.94)}
+    .on-dark-muted{color:rgba(255,255,255,.85)}
+    .meta{letter-spacing:.02em;font-weight:600}
+  </style>
+
+  <!-- Basic analytics stub -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function track(event, params={}){ dataLayer.push({event, ...params}); }
+  </script>
+</head>
+<body class="antialiased">
+
+  <!-- Scroll progress -->
+  <div id="progress" aria-hidden="true"></div>
+
+  <!-- Skip -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:right-2 bg-blue-700 text-white px-3 py-2 rounded">דלג לתוכן הראשי</a>
+
+  <!-- Header -->
+  <header id="header" class="fixed inset-x-0 top-0 z-50 py-3 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      <a href="#hero" aria-label="דף הבית KD-ICT" class="inline-flex items-center">
+        <img src="https://placehold.co/160x44/png?text=KD-ICT" alt="KD-ICT" class="h-10 w-auto" width="160" height="44" />
+      </a>
+      <nav class="hidden md:flex items-center gap-6" aria-label="תפריט ראשי">
+        <a href="#services" class="text-slate-800 hover:text-primary font-medium">התמחויות</a>
+        <a href="#sectors" class="text-slate-800 hover:text-primary font-medium">למי זה מתאים</a>
+        <a href="#rfp" class="text-slate-800 hover:text-primary font-medium">מכרזים (RFP/SOW)</a>
+        <a href="#case-studies" class="text-slate-800 hover:text-primary font-medium">פרויקטים</a>
+        <a href="#about" class="text-slate-800 hover:text-primary font-medium">אודות</a>
+        <a href="#contact" class="btn-secondary">צור קשר</a>
+      </nav>
+      <button id="mobile-btn" class="md:hidden text-slate-900 text-2xl" aria-expanded="false" aria-controls="mobile-menu" aria-label="פתיחת תפריט">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-200 shadow-xl" role="navigation">
+      <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col">
+        <a href="#services" class="py-3">התמחויות</a>
+        <a href="#sectors" class="py-3">למי זה מתאים</a>
+        <a href="#rfp" class="py-3">מכרזים (RFP/SOW)</a>
+        <a href="#case-studies" class="py-3">פרויקטים</a>
+        <a href="#about" class="py-3">אודות</a>
+        <a href="#contact" class="py-3 btn-secondary text-center">צור קשר</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section id="hero" class="relative min-h-[90vh] text-white overflow-hidden bg-hero">
+      <img
+        src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1600&auto=format&fit=crop"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
+        width="1600" height="1067" decoding="async" fetchpriority="high" />
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-36 pb-16">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div class="reveal">
+            <div class="flex flex-wrap gap-2 mb-4 on-dark-muted meta">
+              <span class="px-3 py-1 rounded-full bg-accent text-ink text-xs font-extrabold">סייבר וביטחוני</span>
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs">Data Center</span>
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs">IoT · עיר חכמה</span>
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs">PMO · Program</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl leading-tight font-extrabold on-image">
+              יוצרים <span class="text-accent">הצלחה</span> טכנולוגית
+            </h1>
+            <p class="on-dark-muted text-lg md:text-xl mt-4 max-w-xl">
+              KD-ICT מובילה פרויקטי IT, סייבר, תשתיות ו-IoT — בזמן, בתקציב, ובאיכות של אנטרפרייז.
+            </p>
+            <div class="mt-8 flex gap-3">
+              <a href="#rfp" class="btn-primary" onclick="track('cta_click',{where:'hero',cta:'rfp_desk'})">בקשו מענה למכרז</a>
+              <a href="#case-studies" class="btn-tertiary" onclick="track('cta_click',{where:'hero',cta:'view_cases'})">ראו סיפורי לקוח</a>
+            </div>
+
+            <ul class="flex flex-wrap gap-6 mt-10 on-dark-muted">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-shield text-accent"></i> ISO 27001 Ready</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-gauge text-accent"></i> KPI-Driven</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-diagram-project text-accent"></i> PMO מומחה</li>
+            </ul>
+          </div>
+
+          <!-- Hero proof card -->
+          <div class="reveal">
+            <div class="rounded-2xl glass-strong p-6 md:p-8 shadow-2xl">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-accent text-ink flex items-center justify-center text-2xl shadow">
+                  <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div>
+                  <p class="on-dark-muted text-sm">שקיפות ובקרה</p>
+                  <h3 class="text-2xl font-bold on-image">דוח התקדמות שבועי</h3>
+                </div>
+              </div>
+              <ul class="space-y-3 on-dark-muted">
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> Milestones וגאנט</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> ניהול סיכונים ו-RACI</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> QA/UAT ותכנית הקשחה</li>
+                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-accent"></i> SLA ותמיכה מתמשכת</li>
+              </ul>
+              <a href="#lead" class="mt-6 inline-flex items-center justify-center w-full bg-accent text-ink font-bold py-3 rounded-xl hover:brightness-95 transition" onclick="track('cta_click',{where:'hero_card',cta:'lead_pmo_template'})">קבלו את תבנית הדוח</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <svg class="absolute bottom-0 left-0 right-0" height="96" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,40 C300,80 900,0 1200,40 L1200,120 L0,120 Z" fill="#f6f8fb"></path>
+      </svg>
+    </section>
+
+    <!-- Numbers -->
+    <section id="proof" class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10 reveal">
+          <p class="text-primary font-semibold">המספרים שלנו מדברים בעד עצמם</p>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">במספרים</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="card p-8 text-center reveal">
+            <div class="text-4xl md:text-5xl font-extrabold" data-kpi="99.9">0%</div>
+            <div class="text-slate-700 mt-1">Uptime ממוצע</div>
+          </div>
+          <div class="card p-8 text-center reveal">
+            <div class="text-4xl md:text-5xl font-extrabold" data-kpi="15">0</div>
+            <div class="text-slate-700 mt-1">שנות ניסיון</div>
+          </div>
+          <div class="card p-8 text-center reveal">
+            <div class="text-4xl md:text-5xl font-extrabold" data-kpi="98">0%</div>
+            <div class="text-slate-700 mt-1">שביעות רצון</div>
+          </div>
+          <div class="card p-8 text-center reveal">
+            <div class="text-4xl md:text-5xl font-extrabול" data-kpi="120">0</div>
+            <div class="text-slate-700 mt-1">פרויקטים</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold">ההתמחויות שלנו</h2>
+          <p class="text-slate-700 mt-3">עברו עם העכבר או הקליקו כדי לסנן סיפורי לקוח.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="card overflow-hidden reveal" data-filter="cyber">
+            <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1200&auto=format&fit=crop" alt="אבטחת מידע" class="w-full h-44 object-cover" loading="lazy" width="1200" height="800" decoding="async">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-1 text-slate-900">אבטחת מידע וביטחוני</h3>
+              <p class="text-slate-700 clamp-2">ISO 27001, XDR/SIEM, הקשחה ו-Incident Response.</p>
+              <button class="btn-tertiary mt-3">סננו פרויקטים</button>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal" data-filter="data-center">
+            <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&auto=format&fit=crop" alt="Data Center" class="w-full h-44 object-cover" loading="lazy" width="1200" height="800" decoding="async">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-1 text-slate-900">תשתיות ודאטה סנטר</h3>
+              <p class="text-slate-700 clamp-2">N+1, DR ורציפות עסקית, מהארכיטקטורה עד ה-Cutover.</p>
+              <button class="btn-terטיary mt-3">סננו פרויקטים</button>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal" data-filter="iot">
+            <img src="https://images.unsplash.com/photo-1488371934083-edb7857977df?q=80&w=1200&auto=format&fit=crop" alt="IoT / עיר חכמה" class="w-full h-44 object-cover" loading="lazy" width="1200" height="800" decoding="async">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-1 text-slate-900">IoT / עיר חכמה</h3>
+              <p class="text-slate-700 clamp-2">חיישנים, Edge ו-Real-time Analytics לשיפור תפעול וחוויית משתמש.</p>
+              <button class="btn-tertiary mt-3">סננו פרויקטים</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="text-center mt-10 reveal">
+          <a href="#rfp" class="btn-secondary" onclick="track('cta_click',{where:'services',cta:'rfp_desk'})">בקשו מענה למכרז</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sectors -->
+    <section id="sectors" class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-8 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">פתרונות לפי סקטור</h2>
+          <p class="text-slate-700 mt-3">תוכן, KPIs וסיפורי לקוח מותאמים לקהל היעד.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="card p-6 reveal">
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">רשויות מקומיות</h3>
+            <p class="text-slate-700">תאום תשתיות, עיר חכמה, ניטור ובטיחות, SLA ושקיפות.</p>
+            <a href="#case-studies" class="mt-4 inline-flex items-center gap-2 text-primary font-bold" onclick="track('sector_click',{sector:'municipality'})">ראו פרויקטים<i class="fa-solid fa-arrow-left-long"></i></a>
+          </article>
+          <article class="card p-6 reveal">
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">גופים ממשלתיים/ביטחוניים</h3>
+            <p class="text-slate-700">הקשחה, ציות, רמות סיווג ומסירה באיכות אנטרפרייז.</p>
+            <a href="#case-studies" class="mt-4 inline-flex items-center gap-2 text-primary font-bold" onclick="track('sector_click',{sector:'gov_defense'})">ראו פרויקטים<i class="fa-solid fa-arrow-left-long"></i></a>
+          </article>
+          <article class="card p-6 reveal">
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">חברות אנטרפרייז</h3>
+            <p class="text-slate-700">PMO, DR/BCP, Observability ו-Modernization בשלבים.</p>
+            <a href="#case-studies" class="mt-4 inline-flex items-center gap-2 text-primary font-bold" onclick="track('sector_click',{sector:'enterprise'})">ראו פרויקטים<i class="fa-solid fa-arrow-left-long"></i></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- RFP/SOW Desk -->
+    <section id="rfp" class="bg-slate-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div class="reveal">
+            <h2 class="text-4ל md:text-5xl font-extrabold on-image">דסק מכרזים · RFP/SOW</h2>
+            <p class="on-dark-muted mt-3">מנסח/תים עבורך מענה למכרז, SOW מדויק וגאנט ריאלי — בזמן.</p>
+            <ul class="mt-6 space-y-3 on-dark-muted">
+              <li class="flex items-center gap-3"><i class="fa-solid fa-file-signature text-accent"></i> בחינת דרישות וטיוב מסמכים</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-list-check text-accent"></i> פירוק תכולות ל-Deliverables + KPI</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-people-group text-accent"></i> תיאום ספקים ו-Governance</li>
+            </ul>
+            <div class="mt-6 flex gap-3">
+              <a href="#contact" class="btn-primary" onclick="track('cta_click',{where:'rfp',cta:'book_call'})">קבעו שיחת PMO</a>
+              <a href="#lead" class="btn-tertiary underline" onclick="track('cta_click',{where:'rfp',cta:'pmo_template'})">קבלו את תבנית דוח ה-PMO</a>
+            </div>
+          </div>
+
+          <div class="card p-6 bg-white text-slate-900 reveal" role="form" aria-label="טופס מענה למכרז">
+            <h3 class="text-2xl font-bold mb-2">העלאת מסמכי מכרז</h3>
+            <p class="text-slate-700 mb-4">העלו RFP/מפרט וציינו דדליין — נחזור אליכם תוך 24 שעות.</p>
+            <form id="rfp-form" novalidate>
+              <div class="mb-4 input-wrap">
+                <i class="fa-solid fa-user"></i>
+                <label class="sr-only" for="rfp-name">שם מלא</label>
+                <input id="rfp-name" name="name" type="text" required class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:border-primary" placeholder="שם מלא">
+              </div>
+              <div class="mb-4 input-wrap">
+                <i class="fa-solid fa-envelope"></i>
+                <label class="sr-only" for="rfp-email">מייל</label>
+                <input id="rfp-email" name="email" type="email" required dir="ltr" inputmode="email" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:border-primary" placeholder="מייל">
+              </div>
+              <div class="mb-4 input-wrap">
+                <i class="fa-solid fa-calendar-day"></i>
+                <label class="sr-only" for="rfp-deadline">דדליין</label>
+                <input id="rfp-deadline" name="deadline" type="date" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:border-primary" placeholder="דדליין">
+              </div>
+              <div class="mb-4">
+                <label class="block font-bold mb-2">RFP/מסמכים</label>
+                <input id="rfp-files" name="files" type="file" accept=".pdf,.doc,.docx,.xlsx" multiple class="block w-full text-slate-800">
+                <p class="text-xs text-slate-600 mt-1">הערה: אנו מחויבים לסודיות. אין שיתוף עם צד שלישי.</p>
+              </div>
+              <button class="btn-secondary w-full" type="submit">שלח/י</button>
+              <p id="rfp-ok" class="hidden mt-3 text-center font-semibold text-ok">תודה! נחזור אליך בהקדם.</p>
+              <p id="rfp-err" class="hidden mt-3 text-center font-semibold text-bad">נא לבדוק את הפרטים ולנסות שוב.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="methodology" class="bg-slate-900 text-white relative overflow-hidden">
+      <div aria-hidden="true" class="absolute inset-0 opacity-15"
+           style="background-image:radial-gradient(700px 240px at 80% 20%,#1976D2 0%,transparent 60%), radial-gradient(600px 260px at 20% 60%,#FFC107 0%,transparent 60%);"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+        <div class="text-center mb-8 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold on-image">המתודולוגיה שלנו</h2>
+          <p class="on-dark-muted mt-3">תהליך שמוריד סיכונים ומקצר Time-to-Value.</p>
+        </div>
+
+        <div class="timeline grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="step text-center reveal">
+            <div class="dot mx-auto">1</div>
+            <h3 class="mt-3 text-xl font-bold text-accent">אפיון</h3>
+            <p class="on-dark-muted">צרכים, סיכונים ו-Roadmap.</p>
+          </div>
+          <div class="step text-center reveal">
+            <div class="dot mx-auto">2</div>
+            <h3 class="mt-3 text-xl font-bold text-accent">תכנון</h3>
+            <p class="on-dark-muted">ארכיטקטורה, גאנט, RACI.</p>
+          </div>
+          <div class="step text-center reveal">
+            <div class="dot mx-auto">3</div>
+            <h3 class="mt-3 text-xl font-bold text-accent">ביצוע</h3>
+            <p class="on-dark-muted">אינטגרציה מבוקרת, QA/UAT.</p>
+          </div>
+          <div class="step text-center reveal">
+            <div class="dot mx-auto">4</div>
+            <h3 class="mt-3 text-xl font-bold text-accent">תמיכה</h3>
+            <p class="on-dark-muted">SLA, DevOps/Monitoring.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-8 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">סיפורי לקוח</h2>
+          <p class="text-slate-700 mt-3">בחרו תחום — וראו דוגמאות מהשטח.</p>
+        </div>
+
+        <div class="flex flex-wrap gap-2 justify-center mb-8 reveal">
+          <button class="px-4 py-2 rounded-full border bg-white text-slate-800 font-medium case-filter-btn" data-tag="all">הכול</button>
+          <button class="px-4 py-2 rounded-full border bg-white text-slate-800 font-medium case-filter-btn" data-tag="data-center">דאטה סנטר</button>
+          <button class="px-4 py-2 rounded-full border bg-white text-slate-800 font-medium case-filter-btn" data-tag="cyber">סייבר</button>
+          <button class="px-4 py-2 rounded-full border bg-white text-slate-800 font-medium case-filter-btn" data-tag="iot">IoT</button>
+        </div>
+
+        <div id="cases-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="card overflow-hidden reveal case-card" data-tags="iot">
+            <img src="https://placehold.co/800x480/0f172a/FFFFFF?text=Smart+City" class="w-full h-44 object-cover" alt="ניהול תנועה עירוני" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">IoT</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">ניהול תנועה עירוני</h3>
+              <p class="text-slate-700 clamp-2">חיישנים ו-Real-time Analytics לשיפור זמני נסיעה והורדת עומסים.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">זמן נסיעה ↓ 18%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">אירועי עומס ↓ 27%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">SLA 24/7</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal case-card" data-tags="cyber">
+            <img src="https://placehold.co/800x480/1f2937/FFFFFF?text=Cyber+Upgrade" class="w-full h-44 object-cover" alt="שדרוג מערך סייבר ציבורי" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">סייבר</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">שדרוג מערך סייבר ציבורי</h3>
+              <p class="text-slate-700 clamp-2">XDR/SIEM, הדרכות צוות ו-IR Playbook להפחתת MTTR.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">MTTR ↓ 42%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">אירועי P1 ↓ 31%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">ציות ISO↑</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal case-card" data-tags="data-center">
+            <img src="https://placehold.co/800x480/0D47A1/FFFFFF?text=Data+Center" class="w-full h-44 object-cover" alt="מרכז מחשוב פיננסי" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">דאטה סנטר</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">מרכז מחשוב פיננסי</h3>
+              <p class="text-slate-700 clamp-2">N+1, DR ורציפות עסקית — תכנון עד Cutover חלק.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">Uptime 99.99%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">RTO ↓ 35%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">N+1 מאושר</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal case-card" data-tags="data-center">
+            <img src="https://placehold.co/800x480/003366/FFFFFF?text=Cloud+Migration" class="w-full h-44 object-cover" alt="מיגרציה לענן היברידי" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">דאטה סנטר</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">מיגרציה לענן היברידי</h3>
+              <p class="text-slate-700 clamp-2">תלויות, ביצוע הדרגתי ו-Observability מתמשך.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">CapEx ↓</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">TTV ↓ 22%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">Observability 360°</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal case-card" data-tags="iot">
+            <img src="https://placehold.co/800x480/3b82f6/FFFFFF?text=Edge+IoT" class="w-full h-44 object-cover" alt="Edge Analytics לייצור" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">IoT</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">Edge Analytics לייצור</h3>
+              <p class="text-slate-700 clamp-2">זמינות↑ תקלות↓ והתרעות בזמן אמת.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">זמינות ↑ 6.5%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">תקלות ↓ 19%</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">MTBF ↑</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal case-card" data-tags="cyber data-center">
+            <img src="https://placehold.co/800x480/334155/FFFFFF?text=Hardening" class="w-full h-44 object-cover" alt="הקשחת תשתיות היברידיות" loading="lazy" width="800" height="480" decoding="async">
+            <div class="p-6">
+              <p class="text-primary font-semibold text-sm mb-1">סייבר + דאטה סנטר</p>
+              <h3 class="text-xl font-bold mb-2 text-slate-900">הקשחת תשתיות היברידיות</h3>
+              <p class="text-slate-700 clamp-2">Zero-Trust, Segmentation ו-BCP.</p>
+              <ul class="mt-3 grid grid-cols-3 gap-2 text-xs text-slate-800">
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">סיכוני L3–L7 ↓</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">בקרות ↑</li>
+                <li class="bg-slate-100 rounded px-2 py-1 text-center">TCO ↓</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead magnet: PMO Status Report -->
+    <section id="lead" class="bg-primary text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <i class="fas fa-chart-line text-6xl mb-4 text-white/90" aria-hidden="true"></i>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-3">דוח סטטוס PMO מוכן לשימוש</h2>
+        <p class="text-white/90 max-w-2xl mx-auto mb-4">תבנית <strong>PPTX</strong> + גיליון <strong>Google Sheet</strong> עם גרפים אוטומטיים, RAG, סיכונים ו-KPI.</p>
+        <ul class="flex flex-wrap justify-center gap-3 text-white/90 text-sm mb-6">
+          <li class="bg-white/10 rounded-full px-3 py-1">Executive Summary מוכן</li>
+          <li class="bg-white/10 rounded-full px-3 py-1">גאנט ו-Milestones ניתנים לעריכה</li>
+          <li class="bg-white/10 rounded-full px-3 py-1">RACI + Risk Register</li>
+        </ul>
+        <button id="open-lead" class="btn-primary" onclick="track('lead_open_btn')">קבלו את התבנית</button>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">מה הלקוחות אומרים</h2>
+          <p class="text-slate-700 mt-3">שקיפות, מקצועיות ותוצאות.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <figure class="card p-6 reveal">
+            <div class="flex items-center gap-3 mb-3">
+              <img src="https://placehold.co/64x64" alt="דנה כהן" class="rounded-full" loading="lazy" width="64" height="64">
+              <div>
+                <div class="font-semibold text-slate-900">דנה כהן</div>
+                <div class="text-sm text-slate-700">מנהלת IT · חברת פיננסים</div>
+              </div>
+              <img src="https://placehold.co/80x24?text=LOGO" alt="לוגו לקוח" class="ms-auto opacity-80" loading="lazy" width="80" height="24">
+            </div>
+            <blockquote class="text-slate-800 leading-relaxed">“פרויקט תשתיות מורכב בלוחות זמנים צפופים — עם שקיפות מלאה וביצוע ללא פשרות.”</blockquote>
+          </figure>
+
+          <figure class="card p-6 reveal">
+            <div class="flex items-center gap-3 mb-3">
+              <img src="https://placehold.co/64x64" alt="יוסי אלקיים" class="rounded-full" loading="lazy" width="64" height="64">
+              <div>
+                <div class="font-semibold text-slate-900">יוסי אלקיים</div>
+                <div class="text-sm text-slate-700">CTO · סטארטאפ IoT</div>
+              </div>
+              <img src="https://placehold.co/80x24?text=LOGO" alt="לוגו לקוח" class="ms-auto opacity-80" loading="lazy" width="80" height="24">
+            </div>
+            <blockquote class="text-slate-800 leading-relaxed">“ראייה מערכתית עמוקה ו-hands-on. חסכו לנו חודשים וכסף רב.”</blockquote>
+          </figure>
+
+          <figure class="card p-6 reveal">
+            <div class="flex items-center gap-3 mb-3">
+              <img src="https://placehold.co/64x64" alt="שקד לוי" class="rounded-full" loading="lazy" width="64" height="64">
+              <div>
+                <div class="font-semibold text-slate-900">שקד לוי</div>
+                <div class="text-sm text-slate-700">CISO · מוסד ציבורי</div>
+              </div>
+              <img src="https://placehold.co/80x24?text=LOGO" alt="לוגו לקוח" class="ms-auto opacity-80" loading="lazy" width="80" height="24">
+            </div>
+            <blockquote class="text-slate-800 leading-relaxed">“SOC ו-IR שהעלו משמעותית את רמת הביטחון הארגוני.”</blockquote>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="צוות KD-ICT" class="rounded-2xl border border-slate-200 shadow-card reveal" loading="lazy" width="1200" height="800" decoding="async">
+          <div class="reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">אודות KD-ICT</h2>
+            <p class="text-slate-800 text-lg leading-relaxed">
+              צוות עם ניסיון רב-שנים בניהול תכניות מורכבות, הטמעת מערכות ואינטגרציה בין-מערכתית. משמעת הנדסית + גמישות עסקית.
+            </p>
+            <ul class="mt-6 space-y-3 text-slate-800">
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> PMO ו-Program Management</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> Enterprise Architecture</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-star text-primary"></i> DevOps, Observability &amp; Security</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">שאלות נפוצות</h2>
+          <p class="text-slate-700 mt-3">עונים מראש על שאלות והסתייגויות.</p>
+        </div>
+        <div class="divide-y divide-slate-200 border border-slate-200 rounded-xl overflow-hidden">
+          <details class="p-6 group reveal">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
+              איך נראה תהליך ההתקשרות וה-SOW?
+              <span class="transition-transform group-open:rotate-180 text-slate-700"><i class="fa-solid fa-chevron-down"></i></span>
+            </summary>
+            <div class="mt-4 text-slate-800">יעדים, תוצרים, גאנט, KPI ו-SLA — במסמך SOW חתום.</div>
+          </details>
+
+          <details class="p-6 group reveal">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
+              האם עובדים עם ספקים חיצוניים?
+              <span class="transition-transform group-open:rotate-180 text-slate-700"><i class="fa-solid fa-chevron-down"></i></span>
+            </summary>
+            <div class="mt-4 text-slate-800">כן. אינטגרציה ותיאום מול ספקים וקבלני משנה תחת PM מרכזי.</div>
+          </details>
+
+          <details class="p-6 group reveal">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900">
+              מה לגבי אבטחת מידע וציות לתקנים?
+              <span class="transition-transform group-open:rotate-180 text-slate-700"><i class="fa-solid fa-chevron-down"></i></span>
+            </summary>
+            <div class="mt-4 text-slate-800">Best-Practices ותקנים (למשל ISO 27001), הקשחת סביבות ובקרות.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-6 reveal">
+          <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">מוכנים להתחיל?</h2>
+          <p class="text-slate-700 mt-3">מלאו את הפרטים — נחזור אליכם תוך 24 שעות. בלי ספאם.</p>
+        </div>
+
+        <div class="max-w-xl mx-auto card p-8 reveal">
+          <form id="contact-form" novalidate aria-label="טופס יצירת קשר">
+            <div class="mb-5 input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <label class="sr-only" for="name">שם מלא</label>
+              <input id="name" name="name" type="text" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="שם מלא" required autocomplete="name">
+            </div>
+            <div class="mb-5 input-wrap">
+              <i class="fa-solid fa-envelope"></i>
+              <label class="sr-only" for="email">מייל</label>
+              <input id="email" name="email" type="email" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="מייל" dir="ltr" inputmode="email" required autocomplete="email">
+            </div>
+            <div class="mb-5 input-wrap">
+              <i class="fa-solid fa-phone"></i>
+              <label class="sr-only" for="phone">טלפון</label>
+              <input id="phone" name="phone" type="tel" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="טלפון (אופציונלי)" dir="ltr" inputmode="tel">
+            </div>
+            <div class="mb-5 input-wrap">
+              <i class="fa-solid fa-message"></i>
+              <label class="sr-only" for="message">הודעה</label>
+              <textarea id="message" name="message" rows="4" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="איך נוכל לעזור?" required></textarea>
+            </div>
+            <label class="flex items-start gap-2 text-sm mb-4 text-slate-800">
+              <input type="checkbox" id="consent" required class="mt-1">
+              אני מאשר/ת את <a href="/terms" class="underline">תנאי השימוש</a> ואת <a href="/privacy" class="underline">מדיניות הפרטיות</a>
+            </label>
+            <div class="hidden">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+            <button type="submit" class="w-full btn-primary" onclick="track('cta_click',{where:'contact',cta:'submit'})">שלח פנייה</button>
+
+            <p class="text-slate-600 text-xs mt-4 text-center">ממוצע זמן תגובה: 4–24 שעות • אין שיתוף פרטים עם צד שלישי</p>
+
+            <p id="form-success" class="text-green-700 mt-4 text-center hidden font-semibold" role="status" aria-live="polite">תודה! הפנייה נשלחה בהצלחה.</p>
+            <p id="form-error" class="text-red-600 mt-3 text-center hidden font-semibold" role="alert">שגיאה בשליחה. נסו שוב.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CTA Strip -->
+  <aside class="bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col md:flex-row items-center gap-3">
+      <span class="font-bold text-slate-900">במכרז עכשיו?</span>
+      <div class="ms-auto flex gap-2">
+        <a href="#rfp" class="btn-secondary" onclick="track('cta_strip',{cta:'rfp'})">בקשו מענה למכרז</a>
+        <a href="#lead" class="btn-primary" onclick="track('cta_strip',{cta:'pmo_template'})">קבלו תבנית דוח PMO</a>
+        <a href="#contact" class="btn-tertiary underline" onclick="track('cta_strip',{cta:'book_call'})">קבעו שיחת PMO</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="bg-ink text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <img src="https://placehold.co/160x44/png?text=KD-ICT" alt="KD-ICT" class="h-10 mb-4" width="160" height="44" />
+          <p class="text-white/80 text-sm">ק.ד – ניהול, תכנון ואינטגרציה בע"מ · ח.פ 516000000</p>
+          <p class="text-white/70 text-xs mt-1">Since 2019</p>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3 text-white/95">ניווט</h4>
+          <ul class="space-y-2">
+            <li><a href="#services" class="text-white/85 hover:text-accent">התמחויות</a></li>
+            <li><a href="#sectors" class="text-white/85 hover:text-accent">למי זה מתאים</a></li>
+            <li><a href="#case-studies" class="text-white/85 hover:text-accent">סיפורי לקוח</a></li>
+            <li><a href="#about" class="text-white/85 hover:text-accent">אודות</a></li>
+            <li><a href="#contact" class="text-white/85 hover:text-accent">צור קשר</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3 text-white/95">צור קשר</h4>
+          <ul class="space-y-2 text-white/85">
+            <li><i class="fa-solid fa-phone ms-1"></i> <a href="tel:+972501234567" class="hover:text-accent">050-123-4567</a></li>
+            <li><i class="fa-solid fa-envelope ms-1"></i> <a href="mailto:contact@kd-ict.example" class="hover:text-accent">contact@kd-ict.example</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3 text-white/95">סניפים</h4>
+          <ul class="space-y-2 text-white/85">
+            <li><i class="fa-solid fa-location-dot ms-1"></i> ראשון לציון · נח מוזס 2 (קומה 2)</li>
+            <li><i class="fa-solid fa-location-dot ms-1"></i> עכו · החרושת 2 (קניון עזריאלי, קומה 3, מתחם טק-פוינט)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="text-white/70 text-xs mt-8">&copy; 2025 כל הזכויות שמורות.</p>
+    </div>
+  </footer>
+
+  <!-- Lead Modal (PMO Template) -->
+  <div id="lead-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative">
+      <button id="lead-close" class="absolute top-4 left-4 text-slate-700 hover:text-slate-900 text-2xl" aria-label="סגירת חלון">&times;</button>
+      <h3 class="text-2xl font-bold text-center mb-2" id="lead-modal-title">הורדת תבנית דוח סטטוס PMO</h3>
+      <p class="text-center text-slate-700 mb-3">PPTX + Google Sheet (RAG, KPI, סיכונים, Milestones)</p>
+      <form id="lead-form" aria-label="טופס קבלת תבנית דוח PMO" novalidate>
+        <div class="mb-4">
+          <label class="sr-only" for="lead-name">שם מלא</label>
+          <input id="lead-name" name="lead-name" type="text" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="שם מלא" required autocomplete="name" />
+        </div>
+        <div class="mb-6">
+          <label class="sr-only" for="lead-email">מייל</label>
+          <input id="lead-email" name="lead-email" type="email" class="block w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-primary text-slate-900 placeholder-slate-500" placeholder="מייל" dir="ltr" required autocomplete="email" inputmode="email" />
+        </div>
+        <button type="submit" class="w-full btn-secondary">שלחו לי את התבנית</button>
+        <p id="lead-success" class="text-green-700 mt-4 text-center hidden font-semibold" role="status">תודה! התבנית בדרך אליך.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sticky mobile CTA -->
+  <div class="fixed md:hidden bottom-0 inset-x-0 z-40 bg-white/95 border-t border-slate-200 backdrop-blur px-3 py-2 flex gap-2">
+    <a href="#contact" class="flex-1 btn-secondary text-center">השאירו פרטים</a>
+    <a href="https://wa.me/972501234567" target="_blank" rel="noopener" class="px-4 rounded-lg border border-slate-300 flex items-center justify-center" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp text-2xl text-slate-800"></i></a>
+    <a href="tel:+972501234567" class="px-4 rounded-lg border border-slate-300 flex items-center justify-center" aria-label="Call"><i class="fa-solid fa-phone text-xl text-slate-800"></i></a>
+  </div>
+
+  <!-- JSON-LD: Organization + Branches + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"KD-ICT",
+    "url":"https://www.kd-ict.example/",
+    "logo":"https://placehold.co/160x44/png?text=KD-ICT",
+    "contactPoint":[{"@type":"ContactPoint","telephone":"+972-50-123-4567","contactType":"customer service","areaServed":"IL","availableLanguage":["he","en"]}],
+    "subOrganization":[
+      {"@type":"LocalBusiness","name":"KD-ICT סניף ראשון לציון","address":{"@type":"PostalAddress","addressLocality":"ראשון לציון","streetAddress":"נח מוזס 2, קומה 2","addressCountry":"IL"}},
+      {"@type":"LocalBusiness","name":"KD-ICT סניף עכו","address":{"@type":"PostalAddress","addressLocality":"עכו","streetAddress":"החרושת 2, קניון עזריאלי, קומה 3, מתחם טק-פוינט","addressCountry":"IL"}}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"איך נראה תהליך ההתקשרות וה-SOW?","acceptedAnswer":{"@type":"Answer","text":"יעדים, תוצרים, גאנט, KPI ו-SLA — במסמך SOW חתום."}},
+      {"@type":"Question","name":"האם עובדים עם ספקים חיצוניים?","acceptedAnswer":{"@type":"Answer","text":"כן. אינטגרציה ותיאום מול ספקים וקבלני משנה תחת PM מרכזי."}},
+      {"@type":"Question","name":"מה לגבי אבטחת מידע וציות לתקנים?","acceptedAnswer":{"@type":"Answer","text":"Best-Practices ותקנים (למשל ISO 27001), הקשחת סביבות ובקרות."}}
+    ]
+  }
+  </script>
+
+  <!-- Scripts -->
+  <script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // Header + mobile menu
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', ()=> header.classList.toggle('scrolled', window.scrollY>50));
+    const mobileBtn = document.getElementById('mobile-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn.addEventListener('click', ()=>{
+      const ex = mobileBtn.getAttribute('aria-expanded')==='true';
+      mobileBtn.setAttribute('aria-expanded', String(!ex));
+      mobileMenu.classList.toggle('hidden');
+      track('mobile_menu_toggle',{open:!ex});
+    });
+    mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+      mobileMenu.classList.add('hidden'); mobileBtn.setAttribute('aria-expanded','false')
+    }));
+
+    // Scroll progress bar
+    const progress = document.getElementById('progress');
+    const docHeight = () => document.documentElement.scrollHeight - window.innerHeight;
+    function tick(){ const s = window.scrollY / Math.max(1, docHeight()); progress.style.transform = `scaleX(${s})`; requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+    },{threshold:.22, rootMargin:'0px 0px -5% 0px'});
+    reveals.forEach(el=>io.observe(el));
+
+    // KPI counters
+    const kpis = document.querySelectorAll('[data-kpi]');
+    const ioKpi = new IntersectionObserver((ents)=>{
+      ents.forEach(ent=>{
+        if(!ent.isIntersecting) return;
+        const el = ent.target; const target = parseFloat(el.dataset.kpi);
+        const dur = 1200; const s = performance.now();
+        function step(n){
+          const p = Math.min((n-s)/dur,1);
+          const val = target % 1 ? (p*target).toFixed(1) : Math.floor(p*target);
+          el.textContent = target % 1 ? `${val}%` : val.toLocaleString('he-IL');
+          if(p<1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step); ioKpi.unobserve(el);
+      });
+    },{threshold:.5});
+    kpis.forEach(k=>ioKpi.observe(k));
+
+    // Services -> filter case studies
+    function applyFilter(tag){
+      const cards = document.querySelectorAll('.case-card');
+      cards.forEach(card=>{
+        const tags = (card.getAttribute('data-tags')||'').split(/\s+/);
+        const show = tag==='all' || tags.includes(tag);
+        card.classList.toggle('hidden', !show);
+      });
+      document.querySelectorAll('.case-filter-btn').forEach(b=>b.classList.remove('bg-primary','text-white'));
+      const btn = document.querySelector(`.case-filter-btn[data-tag="${tag}"]`);
+      btn?.classList.add('bg-primary','text-white');
+      track('case_filter',{tag});
+    }
+    document.querySelectorAll('.case-filter-btn').forEach(btn=>btn.addEventListener('click', ()=>applyFilter(btn.dataset.tag)));
+    document.querySelectorAll('#services .btn-tertiary').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const tag = btn.closest('article')?.dataset.filter || 'all';
+        applyFilter(tag);
+        document.getElementById('case-studies').scrollIntoView({behavior:'smooth'});
+      });
+    });
+    applyFilter('all');
+
+    // Lead modal (focus trap + Esc)
+    const leadModal = document.getElementById('lead-modal');
+    const openLead = document.getElementById('open-lead');
+    const leadClose = document.getElementById('lead-close');
+    const focusableSel='a[href],area[href],input,select,textarea,button,[tabindex]:not([tabindex="-1"])';
+    const getF=()=>Array.from(leadModal.querySelectorAll(focusableSel)).filter(el=>!el.disabled && el.offsetParent!==null);
+    function openLeadModal(){ leadModal.classList.replace('hidden','flex'); setTimeout(()=>getF()[0]?.focus(),10); track('lead_open'); }
+    function closeLeadModal(){ leadModal.classList.replace('flex','hidden'); }
+    openLead?.addEventListener('click', openLeadModal);
+    leadClose?.addEventListener('click', closeLeadModal);
+    leadModal.addEventListener('click', e=>{ if(e.target===leadModal) closeLeadModal(); });
+    leadModal.addEventListener('keydown', e=>{
+      if(e.key==='Escape') return closeLeadModal();
+      if(e.key!=='Tab') return; const f=getF(); if(!f.length) return;
+      const [first,last]=[f[0],f[f.length-1]]; if(e.shiftKey && document.activeElement===first){e.preventDefault(); last.focus();}
+      else if(!e.shiftKey && document.activeElement===last){e.preventDefault(); first.focus();}
+    });
+
+    // Lead form (demo)
+    document.getElementById('lead-form')?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('lead-name').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      if(!name || !/^\S+@\S+\.\S+$/.test(email)) return alert('בדקו את הפרטים ונסו שוב.');
+      document.getElementById('lead-success').classList.remove('hidden');
+      track('lead_submit', {asset:'pmo_template'});
+      setTimeout(()=>leadModal.classList.replace('flex','hidden'), 1200);
+    });
+
+    // RFP form (demo)
+    const rfpForm = document.getElementById('rfp-form');
+    rfpForm?.addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const ok = document.getElementById('rfp-ok');
+      const err = document.getElementById('rfp-err');
+      ok.classList.add('hidden'); err.classList.add('hidden');
+      const name = document.getElementById('rfp-name').value.trim();
+      const email = document.getElementById('rfp-email').value.trim();
+      if(!name || !/^\S+@\S+\.\S+$/.test(email)){ err.classList.remove('hidden'); return; }
+      ok.classList.remove('hidden'); track('rfp_submit');
+      rfpForm.reset();
+    });
+
+    // Contact form (demo)
+    const cForm = document.getElementById('contact-form');
+    const ok = document.getElementById('form-success');
+    const err = document.getElementById('form-error');
+    cForm.addEventListener('submit', async (e)=>{
+      e.preventDefault(); ok.classList.add('hidden'); err.classList.add('hidden');
+      if (cForm.querySelector('#company').value) return; // honeypot
+      const data = {
+        name: cForm.name.value.trim(),
+        email: cForm.email.value.trim(),
+        phone: cForm.phone.value.trim(),
+        message: cForm.message.value.trim(),
+        consent: cForm.querySelector('#consent')?.checked ? 'yes' : 'no'
+      };
+      if(!data.name || !/^\S+@\S+\.\S+$/.test(data.email) || !data.message || data.consent!=='yes'){
+        err.textContent='נא למלא את כל השדות כהלכה ולאשר את התנאים.'; err.classList.remove('hidden'); return;
+      }
+      try{
+        // TODO: החליפו ל־Webhook אמיתי
+        ok.classList.remove('hidden'); track('contact_submit'); cForm.reset();
+        setTimeout(()=>ok.classList.add('hidden'), 4000);
+      }catch(e2){ err.classList.remove('hidden'); }
+    });
+  });
+  </script>
+</body>
+</html>
